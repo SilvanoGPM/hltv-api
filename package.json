@@ -1,0 +1,22 @@
+{
+  "name": "hltv-api",
+  "version": "1.0.0",
+  "license": "MIT",
+  "scripts": {
+    "dev": "cross-env HEADLESS=false ts-node-dev --respawn --transpile-only --poll ./src/index.ts",
+    "build": "tsc",
+    "start": "cross-env HEADLESS=true node build/index.js"
+  },
+  "devDependencies": {
+    "@types/node": "^18.7.14",
+    "cross-env": "^7.0.3",
+    "nodemon": "^2.0.19",
+    "ts-node": "^10.9.1",
+    "ts-node-dev": "^2.0.0"
+  },
+  "dependencies": {
+    "puppeteer": "^17.0.0",
+    "puppeteer-core": "^17.0.0",
+    "typescript": "^4.8.2"
+  }
+}
