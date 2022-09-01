@@ -1,7 +1,7 @@
 import { Page } from "puppeteer";
 
 export async function getTeamInfo(page: Page, team: string) {
-  const teamFormatted = team.startsWith('/') ? team.replace('/', '') : team;
+  const teamFormatted = team.startsWith("/") ? team.replace("/", "") : team;
 
   await page.goto(`https://www.hltv.org/${teamFormatted}`, {
     waitUntil: "networkidle2",
@@ -45,10 +45,19 @@ export async function getTeamInfo(page: Page, team: string) {
 
     function getPlayers() {
       return [...document.querySelectorAll(".bodyshot-team-bg a")].map(
-        (link) => ({
-          url: link.getAttribute("href"),
-          name: link.getAttribute("title"),
-        })
+        (link) => {
+          const image = link.querySelector("img");
+
+          return {
+            url: link.getAttribute("href"),
+            name: link.getAttribute("title"),
+            image: {
+              src: image.getAttribute("src"),
+              alt: image.getAttribute("alt"),
+              title: image.getAttribute("title"),
+            },
+          };
+        }
       );
     }
 
@@ -58,9 +67,37 @@ export async function getTeamInfo(page: Page, team: string) {
       );
 
       return {
-        name: enemy.getAttribute('alt'),
-        logo: enemy.getAttribute('src'),
+        name: enemy.getAttribute("alt"),
+        logo: enemy.getAttribute("src"),
       };
+    }
+
+    function getCurrentForm() {
+      return [...document.querySelectorAll(".streak-ASdvuasdr123Gazx")]
+        .map((match) => ({
+          won: match.classList.contains("won"),
+        }))
+        .reverse();
+    }
+
+    function getTrophies() {
+      return [...document.querySelectorAll("a.trophy")].map((link) => {
+        const trophy = link.querySelector(".trophyDescription");
+
+        const name = trophy.getAttribute("title");
+        const url = link.getAttribute("href");
+        const imageURL = trophy.querySelector("img").getAttribute("src");
+
+        const image = imageURL.startsWith("http")
+          ? imageURL
+          : "https://www.hltv.org" + imageURL;
+
+        return {
+          name,
+          url,
+          image,
+        };
+      });
     }
 
     const country = getElementText(".team-country");
@@ -68,7 +105,17 @@ export async function getTeamInfo(page: Page, team: string) {
     const stats = getTeamStats();
     const players = getPlayers();
     const nextMatch = getNextMatch();
+    const currentForm = getCurrentForm();
+    const thropies = getTrophies();
 
-    return { players, country, name, nextMatch, ...stats };
+    return {
+      players,
+      country,
+      name,
+      next_match: nextMatch,
+      current_form: currentForm,
+      thropies,
+      ...stats,
+    };
   });
 }
