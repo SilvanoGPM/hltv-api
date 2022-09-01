@@ -1,4 +1,5 @@
 import { Page } from "puppeteer";
+import { TEAM_PLACEHOLDER_IMAGE } from '.';
 
 export async function searchTeams(page: Page, teamName: string) {
   await page.goto(`https://www.hltv.org/search?query=${teamName}`, {
@@ -27,7 +28,7 @@ export async function searchTeams(page: Page, teamName: string) {
         id,
         slug,
         name,
-        logo: logo === EMPTY_LOGO ? null : logo,
+        logo: logo === EMPTY_LOGO ? TEAM_PLACEHOLDER_IMAGE : logo,
       };
     });
   });

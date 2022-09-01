@@ -106,7 +106,7 @@ export async function getTeamInfo(page: Page, team: string) {
     const players = getPlayers();
     const nextMatch = getNextMatch();
     const currentForm = getCurrentForm();
-    const thropies = getTrophies();
+    const trophies = getTrophies();
 
     return {
       players,
@@ -114,7 +114,7 @@ export async function getTeamInfo(page: Page, team: string) {
       name,
       next_match: nextMatch,
       current_form: currentForm,
-      thropies,
+      thropies: trophies,
       ...stats,
     };
   });

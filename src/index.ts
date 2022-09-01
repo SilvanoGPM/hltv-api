@@ -8,9 +8,9 @@ async function main() {
   const browser = await launch({ headless });
   const page = await browser.newPage();
 
-  const teams = await Scraper.getTeamInfo(page, '/team/4608/natus-vincere');
+  const x = await Scraper.getTeamMatches(page, '4608');
 
-  console.log(JSON.stringify(teams, null, 2));
+  console.log(JSON.stringify(x, null, 2));
 
   await browser.close();
 }
