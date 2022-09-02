@@ -1,5 +1,5 @@
-import { Page } from "puppeteer";
 import qs from "query-string";
+import { createPage } from "../util/createPage";
 
 type Maps =
   | "de_cache"
@@ -16,18 +16,38 @@ type Maps =
   | "de_ancient";
 
 interface GetTeamMatchesOptions {
+  /**
+   * HLTV TeamId
+   *
+   * Example (Navi Team): 4608 */
   team: string;
+
+  /**
+   * DateFormat: yyyy-MM-dd.
+   *
+   * Example: 2022-09-01 */
   startDate?: string;
+
+  /**
+   * DateFormat: yyyy-MM-dd.
+   *
+   * Example: 2022-09-01 */
   endDate?: string;
+
   stars?: number;
   map?: Maps;
+
+  /**
+   * One based pagination, only positive values. */
   actualPage?: number;
 }
 
-export async function getTeamMatches(
-  page: Page,
-  { actualPage = 1, ...options }: GetTeamMatchesOptions
-) {
+export async function getTeamMatches({
+  actualPage = 1,
+  ...options
+}: GetTeamMatchesOptions) {
+  const [page] = await createPage();
+
   const offset = (actualPage - 1) * 100;
 
   const params = qs.stringify({ ...options, offset });
@@ -37,7 +57,7 @@ export async function getTeamMatches(
     timeout: 0,
   });
 
-  return page.evaluate((page) => {
+  const matches = await page.evaluate((page) => {
     const selector =
       page === 1 ? ".result-con:not(:first-child)" : ".result-con";
 
@@ -61,26 +81,10 @@ export async function getTeamMatches(
 
       const bestOf = mapText.startsWith("bo") ? Number(mapText[2]) : 1;
 
-      const paginationElement = document.querySelector(".pagination-data");
-
-      const [actual, max, total] = paginationElement
-        ? paginationElement.textContent
-            .match(/(\d+) - (\d+) of (\d+)/)
-            .splice(1)
-            .map(Number)
-        : [0, 0, 0];
-
-      const pagination = {
-        actual,
-        max,
-        total,
-      };
-
       return {
         link,
         best_of: bestOf,
         stars: stars?.children?.length || 0,
-        pagination,
 
         team: {
           name: mainTeam.textContent,
@@ -103,4 +107,25 @@ export async function getTeamMatches(
       };
     });
   }, actualPage);
+
+  const pagination = await page.evaluate(() => {
+    const paginationElement = document.querySelector(".pagination-data");
+
+    const [actual, max, total] = paginationElement
+      ? paginationElement.textContent
+          .match(/(\d+) - (\d+) of (\d+)/)
+          .splice(1)
+          .map(Number)
+      : [0, 0, 0];
+
+    return {
+      actual,
+      max,
+      total,
+    };
+  });
+
+  await page.close();
+
+  return { matches, pagination };
 }

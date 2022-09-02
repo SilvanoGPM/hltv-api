@@ -1,14 +1,16 @@
-import { Page } from "puppeteer";
+import { createPage } from '../util/createPage';
 
-export async function getTeamInfo(page: Page, team: string) {
+export async function getTeamInfo(team: string) {
+  const [page] = await createPage();
+
   const teamFormatted = team.startsWith("/") ? team.replace("/", "") : team;
 
-  await page.goto(`https://www.hltv.org/${teamFormatted}`, {
+  await page.goto(`https://www.hltv.org/team/${teamFormatted}`, {
     waitUntil: "networkidle2",
     timeout: 0,
   });
 
-  return page.evaluate(() => {
+  const info = await page.evaluate(() => {
     const mappers = {
       world_ranking: (value: string) => parseInt(value.replace("#", "")),
       weeks_in_top30_for_core: parseInt,
@@ -108,6 +110,7 @@ export async function getTeamInfo(page: Page, team: string) {
     const currentForm = getCurrentForm();
     const trophies = getTrophies();
 
+
     return {
       players,
       country,
@@ -118,4 +121,8 @@ export async function getTeamInfo(page: Page, team: string) {
       ...stats,
     };
   });
+
+  await page.close();
+
+  return info;
 }

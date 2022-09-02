@@ -1,23 +1,17 @@
-import { launch } from "puppeteer";
+import express from "express";
 
-import Scraper from "./scraper";
+import { config } from 'dotenv';
 
-const headless = process.env.HEADLESS.toLocaleLowerCase() === "true";
+import teamsController from './controller/teamsController';
 
-async function main() {
-  const browser = await launch({ headless });
-  const page = await browser.newPage();
+config();
 
-  const x = await Scraper.getTeamMatches(page, {
-    team: "4608",
-    actualPage: 1,
-    startDate: '2012-01-01',
-    endDate: '2012-12-31',
-  });
+const app = express();
 
-  console.log(JSON.stringify(x, null, 2));
+const PORT = process.env.PORT || 3000;
 
-  await browser.close();
-}
+app.use('/api/v1/team', teamsController);
 
-main();
+app.listen(PORT, () => {
+  console.log(`Listening on http://localhost:${PORT}`);
+});
