@@ -46,7 +46,7 @@ export async function getTeamMatches({
   actualPage = 1,
   ...options
 }: GetTeamMatchesOptions) {
-  const [page] = await createPage();
+  const [page, browser] = await createPage();
 
   const offset = (actualPage - 1) * 100;
 
@@ -125,7 +125,7 @@ export async function getTeamMatches({
     };
   });
 
-  await page.close();
+  await browser.close();
 
   return { matches, pagination };
 }

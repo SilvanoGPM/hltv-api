@@ -1,7 +1,7 @@
 import { createPage } from '../util/createPage';
 
 export async function getTeamInfo(team: string) {
-  const [page] = await createPage();
+  const [page, browser] = await createPage();
 
   const teamFormatted = team.startsWith("/") ? team.replace("/", "") : team;
 
@@ -122,7 +122,7 @@ export async function getTeamInfo(team: string) {
     };
   });
 
-  await page.close();
+  await browser.close();
 
   return info;
 }

@@ -3,7 +3,7 @@ import { createPage } from "../util/createPage";
 import { TEAM_PLACEHOLDER_IMAGE } from ".";
 
 export async function searchTeams(teamName: string) {
-  const [page] = await createPage();
+  const [page, browser] = await createPage();
 
   await page.goto(`https://www.hltv.org/search?query=${teamName}`, {
     waitUntil: "networkidle2",
@@ -38,7 +38,7 @@ export async function searchTeams(teamName: string) {
     });
   }, TEAM_PLACEHOLDER_IMAGE);
 
-  await page.close();
+  await browser.close();
 
   return teams;
 }
