@@ -1,4 +1,6 @@
-import { createPage } from '../util/createPage';
+import { HLTV_URL } from '.';
+
+import { createPage } from "../util/createPage";
 
 export async function getTeamInfo(team: string) {
   const [page, browser] = await createPage();
@@ -49,14 +51,25 @@ export async function getTeamInfo(team: string) {
       return [...document.querySelectorAll(".bodyshot-team-bg a")].map(
         (link) => {
           const image = link.querySelector("img");
+          const nationality = link.querySelector("img.flag");
+
+          const flagSrc = nationality.getAttribute("src");
+
+          const flag = flagSrc.startsWith('http') ? flagSrc : HLTV_URL + flagSrc;
 
           return {
             url: link.getAttribute("href"),
-            name: link.getAttribute("title"),
+            nick: link.getAttribute("title"),
+            full_name: image.getAttribute("title"),
+
+            nationality: {
+              country: nationality.getAttribute("title"),
+              flag,
+            },
+
             image: {
               src: image.getAttribute("src"),
               alt: image.getAttribute("alt"),
-              title: image.getAttribute("title"),
             },
           };
         }
@@ -109,7 +122,6 @@ export async function getTeamInfo(team: string) {
     const nextMatch = getNextMatch();
     const currentForm = getCurrentForm();
     const trophies = getTrophies();
-
 
     return {
       players,
