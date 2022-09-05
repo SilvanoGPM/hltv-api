@@ -1,6 +1,6 @@
 import { getTeamInfo } from './getTeamInfo';
 import { getTeamMatches } from './getTeamMatches';
-import { searchTeams } from './searchTeams';
+import { search } from './search';
 
 export const HLTV_URL = 'https://www.hltv.org';
 export const TEAM_PLACEHOLDER_IMAGE = 'https://www.hltv.org/img/static/team/placeholder.svg';
@@ -9,7 +9,7 @@ export const PLAYER_PLACEHOLDER_IMAGE = 'https://static.hltv.org/images/playerpr
 export const Scraper = {
   getTeamInfo,
   getTeamMatches,
-  searchTeams,
+  search,
   TEAM_PLACEHOLDER_IMAGE,
   PLAYER_PLACEHOLDER_IMAGE,
 };

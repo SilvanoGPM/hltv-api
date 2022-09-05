@@ -3,9 +3,9 @@ import Scraper from './scraper';
 async function main() {
   console.time('teams');
 
-  const teams = await Scraper.searchTeams('Imperial');
+  const search = await Scraper.search('Navi');
 
-  console.log(JSON.stringify(teams, null, 2));
+  console.log(JSON.stringify(search.event, null, 2));
 
   console.timeEnd('teams');
 }
