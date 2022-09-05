@@ -8,7 +8,7 @@ export async function getTeamInfo(team: string) {
   const teamFormatted = team.startsWith("/") ? team.replace("/", "") : team;
 
   await page.goto(`https://www.hltv.org/team/${teamFormatted}`, {
-    waitUntil: "networkidle2",
+    waitUntil: "domcontentloaded",
     timeout: 0,
   });
 
@@ -122,6 +122,7 @@ export async function getTeamInfo(team: string) {
     const nextMatch = getNextMatch();
     const currentForm = getCurrentForm();
     const trophies = getTrophies();
+    const logo = document.querySelector('.team-logo').getAttribute('src');
 
     return {
       players,
@@ -130,6 +131,7 @@ export async function getTeamInfo(team: string) {
       next_match: nextMatch,
       current_form: currentForm,
       thropies: trophies,
+      logo,
       ...stats,
     };
   });

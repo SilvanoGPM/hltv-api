@@ -6,7 +6,8 @@
     "dev": "cross-env HEADLESS=false ts-node-dev --respawn --transpile-only --poll ./src/index.ts",
     "dev:on": "cross-env HEADLESS=true ts-node-dev --respawn --transpile-only --poll ./src/index.ts",
     "build": "tsc",
-    "start": "cross-env HEADLESS=true node build/index.js"
+    "start": "cross-env HEADLESS=true node build/index.js",
+    "time": "cross-env HEADLESS=true ts-node-dev --transpile-only ./src/time.ts"
   },
   "devDependencies": {
     "@types/express": "^4.17.13",

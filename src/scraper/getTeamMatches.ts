@@ -53,7 +53,7 @@ export async function getTeamMatches({
   const params = qs.stringify({ ...options, offset });
 
   await page.goto(`https://www.hltv.org/results?${params}`, {
-    waitUntil: "networkidle2",
+    waitUntil: "domcontentloaded",
     timeout: 0,
   });
 

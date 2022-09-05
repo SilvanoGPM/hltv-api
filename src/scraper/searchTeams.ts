@@ -6,7 +6,7 @@ export async function searchTeams(teamName: string) {
   const [page, browser] = await createPage();
 
   await page.goto(`https://www.hltv.org/search?query=${teamName}`, {
-    waitUntil: "networkidle2",
+    waitUntil: "domcontentloaded",
     timeout: 0,
   });
 
@@ -16,8 +16,6 @@ export async function searchTeams(teamName: string) {
     const teamsRows = document
       .querySelector("tbody")
       .querySelectorAll("tr:not(:first-child) a");
-
-    console.log('request');
 
     return [...teamsRows].map((row) => {
       const pattern = /\/team\/(\d+)\/(\w+)/;

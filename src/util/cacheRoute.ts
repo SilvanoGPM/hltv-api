@@ -1,10 +1,12 @@
 import { Response } from "express";
 
 import { redisClient } from "../service/redis";
+import { handleRoute } from "./handleRoute";
 
 interface HandleRouteParams {
   res: Response<any, Record<string, any>>;
 
+  expire?: number;
   key: string;
   field: string;
   fetchData: () => Promise<any>;
@@ -15,6 +17,7 @@ export async function cacheRoute({
   key,
   field,
   fetchData,
+  expire = 60 * 60, // one hour
 }: HandleRouteParams) {
   const valueFound = await redisClient.hGet(key, field);
 
@@ -22,16 +25,13 @@ export async function cacheRoute({
     return res.json(JSON.parse(valueFound));
   }
 
-  try {
+  handleRoute(async () => {
     const value = await fetchData();
 
     await redisClient.hSet(key, field, JSON.stringify(value));
 
+    await redisClient.expire(key, expire)
+
     res.json(value);
-  } catch (error) {
-    res.status(500).json({
-      message: "Error on server.",
-      error,
-    });
-  }
+  }, res);
 }
