@@ -32,7 +32,15 @@ router.get("/info/:teamId/:teamName", async (req, res) => {
     res,
     key: teamPath,
     field: "team/info",
-    fetchData: async () => Scraper.getTeamInfo(teamPath),
+    fetchData: async () => {
+      const info = await Scraper.getTeamInfo(teamPath);
+
+      if (info.notFound) {
+        return { notCache: true, status: 400 };
+      }
+
+      return info;
+    },
   });
 });
 

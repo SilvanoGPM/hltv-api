@@ -1,4 +1,5 @@
 import qs from "query-string";
+
 import { createPage } from "../util/createPage";
 
 type Maps =

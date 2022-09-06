@@ -28,6 +28,10 @@ export async function cacheRoute({
   handleRoute(async () => {
     const value = await fetchData();
 
+    if (value.notCache) {
+      return res.status(value.status).send();
+    }
+
     await redisClient.hSet(key, field, JSON.stringify(value));
 
     await redisClient.expire(key, expire)

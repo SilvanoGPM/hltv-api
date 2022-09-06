@@ -1,18 +1,17 @@
 import { HLTV_URL } from '.';
 
 import { createPage } from "../util/createPage";
+import { normalizeSlug } from '../util/formatters';
 
 export async function getTeamInfo(team: string) {
   const [page, browser] = await createPage();
 
-  const teamFormatted = team.startsWith("/") ? team.replace("/", "") : team;
-
-  await page.goto(`https://www.hltv.org/team/${teamFormatted}`, {
+  await page.goto(`https://www.hltv.org/team/${normalizeSlug(team)}`, {
     waitUntil: "domcontentloaded",
     timeout: 0,
   });
 
-  const info = await page.evaluate(() => {
+  const info = await page.evaluate((hltvURL) => {
     const mappers = {
       world_ranking: (value: string) => parseInt(value.replace("#", "")),
       weeks_in_top30_for_core: parseInt,
@@ -23,7 +22,7 @@ export async function getTeamInfo(team: string) {
       selector: string,
       parent: Element | Document = document
     ) {
-      return parent.querySelector(selector).textContent.trim();
+      return parent.querySelector(selector)?.textContent.trim();
     }
 
     function getTeamStats() {
@@ -55,7 +54,7 @@ export async function getTeamInfo(team: string) {
 
           const flagSrc = nationality.getAttribute("src");
 
-          const flag = flagSrc.startsWith('http') ? flagSrc : HLTV_URL + flagSrc;
+          const flag = flagSrc.startsWith('http') ? flagSrc : hltvURL + flagSrc;
 
           return {
             url: link.getAttribute("href"),
@@ -115,8 +114,13 @@ export async function getTeamInfo(team: string) {
       });
     }
 
-    const country = getElementText(".team-country");
     const name = getElementText(".profile-team-name");
+
+    if (!name) {
+      return { notFound: true };
+    }
+
+    const country = getElementText(".team-country");
     const stats = getTeamStats();
     const players = getPlayers();
     const nextMatch = getNextMatch();
@@ -125,16 +129,16 @@ export async function getTeamInfo(team: string) {
     const logo = document.querySelector('.team-logo').getAttribute('src');
 
     return {
-      players,
-      country,
       name,
+      logo,
+      players,
+      trophies,
+      country,
       next_match: nextMatch,
       current_form: currentForm,
-      thropies: trophies,
-      logo,
       ...stats,
     };
-  });
+  }, HLTV_URL);
 
   await browser.close();
 
