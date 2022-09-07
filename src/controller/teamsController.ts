@@ -18,7 +18,7 @@ router.get("/search/:teamName", async (req, res) => {
     fetchData: async () => {
       const search = await Scraper.search(teamName);
 
-      return { teams: search.team };
+      return { teams: search.teams };
     },
   });
 });

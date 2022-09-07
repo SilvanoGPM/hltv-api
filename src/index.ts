@@ -1,5 +1,6 @@
 import express from "express";
 
+import indexController from './controller/indexController';
 import teamsController from './controller/teamsController';
 import utilsController from './controller/utilsController';
 
@@ -22,6 +23,7 @@ app.get('/api/v1', (req, res) => {
   res.json(DEFAULT_RESPONSE);
 });
 
+app.use('/api/v1', indexController);
 app.use('/api/v1/team', teamsController);
 app.use('/api/v1/util', utilsController)
 

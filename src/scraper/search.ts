@@ -10,10 +10,10 @@ interface Topic {
 }
 
 interface Search {
-  player: Topic[];
-  article: Topic[];
-  team: Topic[];
-  event: Topic[];
+  players: Topic[];
+  articles: Topic[];
+  teams: Topic[];
+  events: Topic[];
 }
 
 export async function search(query: string) {
@@ -33,7 +33,7 @@ export async function search(query: string) {
       (search, topic) => {
         const title = topic
           .querySelector(".table-header")
-          .textContent.toLowerCase();
+          .textContent.toLowerCase() + 's';
 
         const rows = topic
           .querySelector("tbody")
@@ -63,12 +63,12 @@ export async function search(query: string) {
         });
 
         if (search[title]) {
-          return { ...search, [title]: [...search[title], value] };
+          return { ...search, [title]: [...search[title], ...value] };
         }
 
         return { ...search };
       },
-      { player: [], team: [], article: [], event: [] }
+      { players: [], teams: [], articles: [], events: [] }
     );
   }, HLTV_URL);
 
