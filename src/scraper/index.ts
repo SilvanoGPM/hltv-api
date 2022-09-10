@@ -1,5 +1,6 @@
 import { getTeamInfo } from './getTeamInfo';
 import { getTeamMatches } from './getTeamMatches';
+import { getMatchInfo } from './getMatchInfo';
 import { search } from './search';
 
 export const HLTV_URL = 'https://www.hltv.org';
@@ -9,6 +10,7 @@ export const PLAYER_PLACEHOLDER_IMAGE = 'https://static.hltv.org/images/playerpr
 export const Scraper = {
   getTeamInfo,
   getTeamMatches,
+  getMatchInfo,
   search,
   TEAM_PLACEHOLDER_IMAGE,
   PLAYER_PLACEHOLDER_IMAGE,

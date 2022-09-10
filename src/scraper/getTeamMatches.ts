@@ -63,7 +63,11 @@ export async function getTeamMatches({
       page === 1 ? ".result-con:not(:first-child)" : ".result-con";
 
     return [...document.querySelectorAll(selector)].map((match) => {
-      const link = match.querySelector(".a-reset").getAttribute("href");
+      const linkText = match.querySelector(".a-reset").getAttribute("href");
+
+      const [, matchId] = linkText.match(/matches\/(\d+)\/\w+/) || [, ''];
+
+      const link = `/match/info/${matchId}`;
 
       const [team, enemy] = match.querySelectorAll(".team-cell");
 

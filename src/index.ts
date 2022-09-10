@@ -2,6 +2,7 @@ import express from "express";
 
 import indexController from './controller/indexController';
 import teamsController from './controller/teamsController';
+import matchesController from './controller/matchesController';
 import utilsController from './controller/utilsController';
 
 import { PORT } from './service/env';
@@ -25,7 +26,8 @@ app.get('/api/v1', (req, res) => {
 
 app.use('/api/v1', indexController);
 app.use('/api/v1/team', teamsController);
-app.use('/api/v1/util', utilsController)
+app.use('/api/v1/match', matchesController);
+app.use('/api/v1/util', utilsController);
 
 app.listen(PORT, async () => {
   await redisClient.connect();

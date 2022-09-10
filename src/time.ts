@@ -3,7 +3,7 @@ import Scraper from './scraper';
 async function main() {
   console.time('teams');
 
-  const info = await Scraper.getTeamInfo('/9455/imperial');
+  const info = await Scraper.getMatchInfo('2357710');
 
   console.log(JSON.stringify(info, null, 2));
 
