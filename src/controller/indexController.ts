@@ -17,11 +17,28 @@ router.get("/search", (req, res) => {
   cacheRoute({
     res,
     key,
-    field: "team/search",
+    field: "search",
     fetchData: async () => {
       const search = await Scraper.search(key);
 
       return { search };
+    },
+  });
+});
+
+router.get("/ranking/:year/:month/:day/:country?", (req, res) => {
+  const options = req.params;
+
+  const key = JSON.stringify(options);
+
+  cacheRoute({
+    res,
+    key,
+    field: "ranking",
+    fetchData: async () => {
+      const teams = await Scraper.getRankingInfo(options);
+
+      return { teams };
     },
   });
 });

@@ -1,13 +1,13 @@
 import Scraper from './scraper';
 
 async function main() {
-  console.time('teams');
+  const rankings = await Scraper.getRankingInfo({
+    day: 5,
+    month: 'september',
+    year: 2022,
+  });
 
-  const info = await Scraper.getMatchInfo('2357710');
-
-  console.log(JSON.stringify(info, null, 2));
-
-  console.timeEnd('teams');
+  console.log(JSON.stringify(rankings, null, 2));
 }
 
 main();
