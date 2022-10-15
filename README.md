@@ -30,3 +30,4 @@
 ## Thanks ❤️
 
 - [HLTV](https://www.hltv.org/)
+- [Render](https://dashboard.render.com/)
