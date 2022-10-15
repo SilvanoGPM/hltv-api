@@ -1,12 +1,11 @@
 import { HLTV_URL } from '.';
 
 import { createPage } from "../util/createPage";
-import { normalizeSlug } from '../util/formatters';
 
-export async function getTeamInfo(team: string) {
+export async function getTeamInfo(teamId: string) {
   const [page, browser] = await createPage();
 
-  await page.goto(`https://www.hltv.org/team/${normalizeSlug(team)}`, {
+  await page.goto(`https://www.hltv.org/team/${teamId}/team`, {
     waitUntil: "domcontentloaded",
     timeout: 0,
   });

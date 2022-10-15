@@ -1,4 +1,5 @@
 import { getTeamInfo } from './getTeamInfo';
+import { getPlayerInfo } from './getPlayerInfo';
 import { getTeamMatches } from './getTeamMatches';
 import { getMatchInfo } from './getMatchInfo';
 import { getRankingInfo } from './getRankingInfo';
@@ -14,6 +15,7 @@ export const Scraper = {
   getMatchInfo,
   getRankingInfo,
   search,
+  getPlayerInfo,
   TEAM_PLACEHOLDER_IMAGE,
   PLAYER_PLACEHOLDER_IMAGE,
 };
