@@ -23,17 +23,15 @@ router.get("/search/:teamName", async (req, res) => {
   });
 });
 
-router.get("/info/:teamId/:teamName", async (req, res) => {
-  const { teamId, teamName } = req.params;
-
-  const teamPath = `${teamId}/${teamName}`.toLowerCase();
+router.get("/info/:teamId", async (req, res) => {
+  const { teamId } = req.params;
 
   cacheRoute({
     res,
-    key: teamPath,
+    key: teamId.toLowerCase(),
     field: "team/info",
     fetchData: async () => {
-      const info = await Scraper.getTeamInfo(teamPath);
+      const info = await Scraper.getTeamInfo(teamId);
 
       if (info.notFound) {
         return { notCache: true, status: 400 };

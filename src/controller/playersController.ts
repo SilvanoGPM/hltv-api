@@ -1,4 +1,5 @@
 import { Router } from 'express';
+
 import Scraper from '../scraper';
 import { cacheRoute } from '../util/cacheRoute';
 

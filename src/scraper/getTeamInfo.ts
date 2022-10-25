@@ -1,4 +1,4 @@
-import { HLTV_URL } from '.';
+import { HLTV_URL } from ".";
 
 import { createPage } from "../util/createPage";
 
@@ -53,7 +53,7 @@ export async function getTeamInfo(teamId: string) {
 
           const flagSrc = nationality.getAttribute("src");
 
-          const flag = flagSrc.startsWith('http') ? flagSrc : hltvURL + flagSrc;
+          const flag = flagSrc.startsWith("http") ? flagSrc : hltvURL + flagSrc;
 
           return {
             url: link.getAttribute("href"),
@@ -113,6 +113,19 @@ export async function getTeamInfo(teamId: string) {
       });
     }
 
+    const social = [
+      ...document.querySelectorAll(".socialMediaButtons a"),
+    ].reduce((social, $element) => {
+      const link = $element.getAttribute("href");
+
+      const media = $element.querySelector("i").classList[2];
+
+      return {
+        ...social,
+        [media]: link,
+      };
+    }, {});
+
     const name = getElementText(".profile-team-name");
 
     if (!name) {
@@ -125,11 +138,12 @@ export async function getTeamInfo(teamId: string) {
     const nextMatch = getNextMatch();
     const currentForm = getCurrentForm();
     const trophies = getTrophies();
-    const logo = document.querySelector('.team-logo').getAttribute('src');
+    const logo = document.querySelector(".team-logo").getAttribute("src");
 
     return {
       name,
       logo,
+      social,
       players,
       trophies,
       country,
