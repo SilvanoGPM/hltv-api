@@ -1,7 +1,7 @@
 import { Browser, launch, Page } from "puppeteer";
 import { HEADLESS } from "../service/env";
 
-const headless = HEADLESS.toLocaleLowerCase() === "true";
+const headless = HEADLESS?.toLocaleLowerCase() === "true";
 
 type CreatePageReturn = [Page, Browser];
 

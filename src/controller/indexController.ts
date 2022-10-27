@@ -1,17 +1,19 @@
 import { Router } from "express";
-import Scraper from '../scraper';
+import Scraper from "../scraper";
 
-import { cacheRoute } from '../util/cacheRoute';
+import { cacheRoute } from "../util/cacheRoute";
 
 const router = Router();
 
 router.get("/search", (req, res) => {
+  // #swagger.tags = ['General']
+
   const { query } = req.query;
 
   const key = String(query).toLowerCase();
 
   if (!query) {
-    return res.status(400).json({ error: 'Empty query' });
+    return res.status(400).json({ error: "Empty query" });
   }
 
   cacheRoute({

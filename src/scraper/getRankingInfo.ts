@@ -17,7 +17,9 @@ export async function getRankingInfo({
 }: GetRankingInfoOptions) {
   const [page, browser] = await createPage();
 
-  const path = `${year}/${month}/${day}${country ? `/country/${country}` : ""}`;
+  const path = `${year}/${month}/${day}${
+    country && country !== "undefined" ? `/country/${country}` : ""
+  }`;
 
   await page.goto(`https://www.hltv.org/ranking/teams/${path}`, {
     waitUntil: "domcontentloaded",
