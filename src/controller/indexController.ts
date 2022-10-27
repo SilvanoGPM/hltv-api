@@ -6,8 +6,6 @@ import { cacheRoute } from "../util/cacheRoute";
 const router = Router();
 
 router.get("/search", (req, res) => {
-  // #swagger.tags = ['General']
-
   const { query } = req.query;
 
   const key = String(query).toLowerCase();
@@ -40,7 +38,7 @@ router.get("/ranking/:year/:month/:day/:country?", (req, res) => {
     fetchData: async () => {
       const teams = await Scraper.getRankingInfo(options);
 
-      return { teams };
+      return teams;
     },
   });
 });
