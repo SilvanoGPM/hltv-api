@@ -31,3 +31,4 @@
 
 - [HLTV](https://www.hltv.org/)
 - [Render](https://dashboard.render.com/)
+- [Documentação](https://hltv-api.onrender.com/api-docs)
