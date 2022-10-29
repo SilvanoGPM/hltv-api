@@ -19,6 +19,10 @@
     {
       "name": "General",
       "description": "Abstract routes"
+    },
+    {
+      "name": "Teams",
+      "description": "Teams routes"
     }
   ],
   "paths": {
@@ -105,9 +109,10 @@
         }
       }
     },
-    "/info/{teamId}": {
+    "/team/info/{teamId}": {
       "get": {
-        "description": "",
+        "tags": ["Teams"],
+        "summary": "Info of team",
         "parameters": [
           {
             "name": "teamId",
@@ -116,7 +121,73 @@
             "type": "string"
           }
         ],
-        "responses": {}
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/TeamInfo"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/team/search/{teamName}": {
+      "get": {
+        "tags": ["Teams"],
+        "summary": "Search a team",
+        "parameters": [
+          {
+            "name": "teamName",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/TeamSearch"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/team/matches/{teamId}": {
+      "get": {
+        "tags": ["Teams"],
+        "summary": "Team matches",
+        "parameters": [
+          {
+            "name": "teamId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/TeamMatches"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/search/{playerName}": {
@@ -139,34 +210,6 @@
         "parameters": [
           {
             "name": "playerId",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {}
-      }
-    },
-    "/search/{teamName}": {
-      "get": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "teamName",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {}
-      }
-    },
-    "/matches/{teamId}": {
-      "get": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "teamId",
             "in": "path",
             "required": true,
             "type": "string"
@@ -283,6 +326,12 @@
           }
         }
       },
+      "TeamSearch": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Search"
+        }
+      },
       "GeneralSearch": {
         "type": "object",
         "properties": {
@@ -312,6 +361,194 @@
                 "items": {
                   "$ref": "#/components/schemas/Search"
                 }
+              }
+            }
+          }
+        }
+      },
+      "TeamInfo": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "logo": {
+            "type": "string"
+          },
+          "social": {
+            "type": "object"
+          },
+          "players": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "url": {
+                  "type": "string"
+                },
+                "nick": {
+                  "type": "string"
+                },
+                "full_name": {
+                  "type": "string"
+                },
+                "nationality": {
+                  "type": "object",
+                  "properties": {
+                    "country": {
+                      "type": "string"
+                    },
+                    "flag": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "image": {
+                  "type": "object",
+                  "properties": {
+                    "src": {
+                      "type": "string"
+                    },
+                    "alt": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "trophies": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "url": {
+                  "type": "string"
+                },
+                "image": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "country": {
+            "type": "string"
+          },
+          "next_match": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "logo": {
+                "type": "string"
+              }
+            }
+          },
+          "current_form": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "won": {
+                  "type": "boolean"
+                }
+              }
+            }
+          },
+          "world_ranking": {
+            "type": "integer"
+          },
+          "weeks_in_top30_for_core": {
+            "type": "integer"
+          },
+          "average_player_age": {
+            "type": "number"
+          },
+          "coach": {
+            "type": "string"
+          }
+        }
+      },
+      "TeamMatches": {
+        "type": "object",
+        "properties": {
+          "matches": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "link": {
+                  "type": "string"
+                },
+                "best_of": {
+                  "type": "integer"
+                },
+                "stars": {
+                  "type": "integer"
+                },
+                "team": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "logo": {
+                      "type": "string"
+                    },
+                    "score": {
+                      "type": "integer"
+                    },
+                    "won": {
+                      "type": "boolean"
+                    }
+                  }
+                },
+                "enemy": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "logo": {
+                      "type": "string"
+                    },
+                    "score": {
+                      "type": "integer"
+                    },
+                    "won": {
+                      "type": "boolean"
+                    }
+                  }
+                },
+                "event": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "type": "string"
+                    },
+                    "src": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "pagination": {
+            "type": "object",
+            "properties": {
+              "actual": {
+                "type": "integer"
+              },
+              "max": {
+                "type": "integer"
+              },
+              "total": {
+                "type": "integer"
               }
             }
           }
