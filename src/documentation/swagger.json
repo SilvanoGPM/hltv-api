@@ -190,7 +190,22 @@
         }
       }
     },
-    "/search/{playerName}": {
+    "/match/info/{teamId}": {
+      "get": {
+        "tags": ["Matches"],
+        "summary": "Info of match",
+        "parameters": [
+          {
+            "name": "teamId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {}
+      }
+    },
+    "/player/search/{playerName}": {
       "get": {
         "description": "",
         "parameters": [
@@ -204,7 +219,7 @@
         "responses": {}
       }
     },
-    "/info/{playerId}": {
+    "/player/info/{playerId}": {
       "get": {
         "description": "",
         "parameters": [
@@ -218,7 +233,7 @@
         "responses": {}
       }
     },
-    "/expire-all": {
+    "/util/expire-all": {
       "get": {
         "description": "",
         "parameters": [],
