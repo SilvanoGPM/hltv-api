@@ -190,19 +190,31 @@
         }
       }
     },
-    "/match/info/{teamId}": {
+    "/match/info/{matchId}": {
       "get": {
         "tags": ["Matches"],
         "summary": "Info of match",
         "parameters": [
           {
-            "name": "teamId",
+            "name": "matchId",
             "in": "path",
             "required": true,
             "type": "string"
           }
         ],
-        "responses": {}
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/MatchInfo"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/player/search/{playerName}": {
@@ -567,6 +579,109 @@
               }
             }
           }
+        }
+      },
+      "MatchInfo": {
+        "type": "object",
+        "properties": {
+          "teams": {
+            "type": "array",
+            "items": {
+              "type": "object",
+
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+
+                "logo": {
+                  "type": "string"
+                },
+
+                "url": {
+                  "type": "string"
+                },
+
+                "win": {
+                  "type": "boolean"
+                },
+
+                "score": {
+                  "type": "integer"
+                },
+
+                "nationality": {
+                  "type": "object",
+                  "properties": {
+                    "country": {
+                      "type": "string"
+                    },
+                    "flag": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+
+          "date": {
+            "type": "string"
+          },
+
+          "match_over": {
+            "type": "boolean"
+          },
+
+          "event": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+
+              "link": {
+                "type": "string"
+              }
+            }
+          },
+
+          "picks": {
+            "type": "object",
+            "properties": {
+              "logs": {
+                "type": "array",
+                "items": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+
+              "maps": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+
+                    "image": {
+                      "type": "string"
+                    },
+
+                    "stats_link": {
+                      "type": "string",
+                      "nullable": true
+                    }
+                  }
+                }
+              }
+            }
+          }
+
         }
       }
     }

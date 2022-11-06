@@ -1,4 +1,5 @@
 import { HLTV_URL } from ".";
+import { HLTVError } from '../error/HLTVError';
 import { createPage } from "../util/createPage";
 
 export async function getMatchInfo(id: string) {
@@ -8,6 +9,14 @@ export async function getMatchInfo(id: string) {
     timeout: 0,
     waitUntil: "domcontentloaded",
   });
+
+  const has500Error = await page.evaluate(() => {
+    return Boolean(document.querySelector('.error-background'));
+  });
+
+  if (has500Error) {
+    throw new HLTVError(404, 'Not Found Match');
+  }
 
   const match = await page.evaluate((hltvURL) => {
     function getElementDateString(element: Element) {
@@ -58,7 +67,7 @@ export async function getMatchInfo(id: string) {
       return {
         name: mapInfo.title,
         image: mapInfo.src,
-        statsLink: linkElement?.getAttribute('href') || null,
+        stats_link: linkElement?.getAttribute('href') || null,
       };
     });
 
@@ -96,7 +105,7 @@ export async function getMatchInfo(id: string) {
     return {
       teams,
       date,
-      matchOver,
+      match_over: matchOver,
       event: {
         name: eventElement.getAttribute("title"),
         link: eventElement.getAttribute("href"),
